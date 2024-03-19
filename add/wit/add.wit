@@ -1,0 +1,10 @@
+package component:add@0.1.0;
+
+interface add {
+    add: func(x: s32, y: s32) -> s32;
+}
+
+/// An example world for the component to target.
+world adder {
+    export add;
+}

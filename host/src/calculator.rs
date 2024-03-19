@@ -2,34 +2,38 @@ use std::path::Path;
 
 use wasmtime::{component::{Component, Linker}, Config, Engine, Store};
 
+use self::component::add::add::Host;
+
 wasmtime::component::bindgen!({
-    path: "../calculator/wit",
+    path: "wit",
     world: "calculator"
 });
 
-struct CalculatorImpl;
+struct CalculatorHost;
 
-impl CalculatorImports for CalculatorImpl {
-    fn add(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
-        Ok(x + y)
-    }
-
-    fn sub(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
-        Ok(x - y)
-    }
-
-    fn mul(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
-        Ok(x * y)
-    }
-
-    fn div(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
-        Ok(x / y)
-    }
-
-    fn mod_(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
-        Ok(x % y)
+impl Host for CalculatorHost {
+    fn add(&mut self,x:i32,y:i32,) -> wasmtime::Result<i32> {
+        todo!()
     }
 }
+
+// impl CalculatorImports for CalculatorImpl {
+//     fn sub(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
+//         Ok(x - y)
+//     }
+
+//     fn mul(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
+//         Ok(x * y)
+//     }
+
+//     fn div(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
+//         Ok(x / y)
+//     }
+
+//     fn mod_(&mut self, x: i32, y: i32) -> wasmtime::Result<i32> {
+//         Ok(x % y)
+//     }
+// }
 
 pub fn calculate(path: impl AsRef<Path>, op: Op, x: i32, y: i32) -> anyhow::Result<i32> {
     let mut config = Config::new();
@@ -38,11 +42,11 @@ pub fn calculate(path: impl AsRef<Path>, op: Op, x: i32, y: i32) -> anyhow::Resu
     let component = Component::from_file(&engine, path)?;
 
     let mut linker = Linker::new(&engine);
-    Calculator::add_to_linker(&mut linker, |state: &mut CalculatorImpl| state)?;
+    // Calculator::add_to_linker(&mut linker, |state| state)?;
 
     let mut store = Store::new(
         &engine,
-        CalculatorImpl,
+        CalculatorHost,
     );
     let (bindings, _) = Calculator::instantiate(&mut store, &component, &linker)?;
 

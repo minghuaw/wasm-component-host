@@ -17,10 +17,10 @@ struct Command {
 fn parse_operator(val: &str) -> anyhow::Result<Op> {
     match val {
         "add" => Ok(Op::Add),
-        "sub" => Ok(Op::Sub),
-        "mul" => Ok(Op::Mul),
-        "div" => Ok(Op::Div),
-        "mod" => Ok(Op::Mod),
+        // "sub" => Ok(Op::Sub),
+        // "mul" => Ok(Op::Mul),
+        // "div" => Ok(Op::Div),
+        // "mod" => Ok(Op::Mod),
         _ => Err(anyhow::anyhow!("Invalid operator")),
     }
 }

@@ -1,0 +1,23 @@
+package component:calculator;
+
+use component:add/add@0.1.0;
+
+/// An example world for the component to target.
+world calculator {
+    // import add: func(x: s32, y: s32) -> s32;
+    import add;
+    // import sub: func(x: s32, y: s32) -> s32;
+    // import mul: func(x: s32, y: s32) -> s32;
+    // import div: func(x: s32, y: s32) -> s32;
+    // import mod: func(x: s32, y: s32) -> s32;
+
+    enum op {
+        add,
+        // sub,
+        // mul,
+        // div,
+        // mod,
+    }
+
+    export eval: func(op: op, x: s32, y: s32) -> s32;
+}
