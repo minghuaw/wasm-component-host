@@ -1,5 +1,7 @@
 # WASM Component Host
 
+This is an example showing compiling and composing a wasm component and load the component in a host runtime (wasmtime).
+
 ## Building and running this example
 
 Build the components with `cargo component`:
