@@ -4,7 +4,7 @@ This is an example showing compiling and composing a wasm component and load the
 
 ## Building and running this example
 
-Build the components with `cargo component`:
+Build the components with [`cargo component`](https://github.com/bytecodealliance/cargo-component):
 
 ```sh
 (cd add && cargo component build --release)
@@ -12,13 +12,13 @@ Build the components with `cargo component`:
 (cd calculator && cargo component build --release)
 ```
 
-Compose the components with `wasm-tools`:
+Compose the components with [`wasm-tools`](https://github.com/bytecodealliance/wasm-tools):
 
 ```sh
 wasm-tools compose target/wasm32-wasi/release/calculator.wasm -d target/wasm32-wasi/release/add.wasm -d target/wasm32-wasi/release/sub.wasm -o target/wasm32-wasi/release/composed.wasm
 ```
 
-Update the `wit` dependencies with `wit-deps`:
+Update the `wit` dependencies with [`wit-deps`](https://github.com/bytecodealliance/wit-deps):
 
 ```sh
 (cd host && wit-deps update)
