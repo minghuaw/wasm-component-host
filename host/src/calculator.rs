@@ -2,10 +2,25 @@ use std::path::Path;
 
 use wasmtime::{component::{Component, Linker}, Config, Engine, Store};
 
-wasmtime::component::bindgen!({
-    path: "wit",
-    world: "calculator"
-});
+#[derive(
+    wasmtime::component::ComponentType, wasmtime::component::Lift, wasmtime::component::Lower,
+)]
+#[component(enum)]
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Op {
+    #[component(name = "add")]
+    Add,
+    #[component(name = "sub")]
+    Sub,
+}
+impl core::fmt::Debug for Op {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Op::Add => f.debug_tuple("Op::Add").finish(),
+            Op::Sub => f.debug_tuple("Op::Sub").finish(),
+        }
+    }
+}
 
 pub fn calculate(path: impl AsRef<Path>, op: Op, x: i32, y: i32) -> anyhow::Result<i32> {
     let mut config = Config::new();
@@ -19,7 +34,9 @@ pub fn calculate(path: impl AsRef<Path>, op: Op, x: i32, y: i32) -> anyhow::Resu
         &engine,
         (),
     );
-    let (bindings, _) = Calculator::instantiate(&mut store, &component, &linker)?;
-
-    bindings.call_eval(&mut store, op, x, y)
+    // let (bindings, _) = Calculator::instantiate(&mut store, &component, &linker)?;
+    let instance = linker.instantiate(&mut store, &component)?;
+    let f = instance.get_typed_func::<(Op, i32, i32), (i32, )>(&mut store, "eval")?;
+    let (result, ) = f.call(&mut store, (op, x, y))?;
+    Ok(result)
 }
