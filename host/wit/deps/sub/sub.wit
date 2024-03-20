@@ -1,1 +1,10 @@
-../../../../sub/wit/sub.wit
+package component:sub@0.1.0;
+
+interface sub {
+    sub: func(x: s32, y: s32) -> s32;
+}
+
+/// An example world for the component to target.
+world subtractor {
+    export sub;
+}
