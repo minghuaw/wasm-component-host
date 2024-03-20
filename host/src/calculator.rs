@@ -28,13 +28,15 @@ pub fn calculate(path: impl AsRef<Path>, op: Op, x: i32, y: i32) -> anyhow::Resu
     let engine = Engine::new(&config)?;
     let component = Component::from_file(&engine, path)?;
 
+    // We don't need to add to linker if the component itself is self-contained
     let linker = Linker::new(&engine);
 
     let mut store = Store::new(
         &engine,
         (),
     );
-    // let (bindings, _) = Calculator::instantiate(&mut store, &component, &linker)?;
+
+    // Manually instantiate the component
     let instance = linker.instantiate(&mut store, &component)?;
     let f = instance.get_typed_func::<(Op, i32, i32), (i32, )>(&mut store, "eval")?;
     let (result, ) = f.call(&mut store, (op, x, y))?;
