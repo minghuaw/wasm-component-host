@@ -1,6 +1,7 @@
 # WASM Component Host
 
 This is an example showing compiling and composing a wasm component and load the component in a host runtime (wasmtime).
+This is developed based on the [host](https://github.com/bytecodealliance/component-docs/tree/main/component-model/examples/example-host) example.
 
 ## Building and running this example
 
